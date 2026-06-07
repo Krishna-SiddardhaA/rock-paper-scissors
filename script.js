@@ -1,22 +1,16 @@
-alert("ROCK_PAPER_SCISSORS");
-
-alert("choose the rock, paper, or scissors");
-
 
 //humanchoice
 
-function getHumanChoice() {
-    let choiceH = prompt("Enter your choice: rock, paper, or scissors").toLowerCase();
+const rockButton = document.getElementById("rock");
+const paperButton = document.getElementById("paper");
+const scissorsButton = document.getElementById("scissors");
 
-    if(choiceH === "rock" || choiceH === "paper" || choiceH === "scissors"){
-        alert(`You choose ${choiceH}`);
-        return choiceH;
-    }
-    else{
-        alert("Invalid choice. Please enter rock, paper, or scissors.");
-        return getHumanChoice();
-    }   
-}
+const resultDiv = document.getElementById("result");
+const scoreDiv = document.getElementById("score");
+
+rockButton.addEventListener("click", () => playRound("rock", getComputerChoice()));
+paperButton.addEventListener("click", () => playRound("paper", getComputerChoice()));
+scissorsButton.addEventListener("click", () => playRound("scissors", getComputerChoice()));
 
 //computerChoice
 
@@ -47,7 +41,7 @@ let computerScore = 0;
 
 function playRound(humanChoice, computerChoice){
     if(humanChoice === computerChoice){
-        return "It's a tie!";
+        resultDiv.textContent = "It's a tie!";
     }
     else if(
         (humanChoice === "rock" && computerChoice === "scissors") ||
@@ -55,44 +49,36 @@ function playRound(humanChoice, computerChoice){
         (humanChoice === "scissors" && computerChoice === "paper")
     ){
         humanScore++;
-        return `You win this round! ${humanChoice} beats ${computerChoice}.`;
+        resultDiv.textContent = `You win this round! ${humanChoice} beats ${computerChoice}.`;
     }
     else{
         computerScore++;
-        return `You lose this round! ${computerChoice} beats ${humanChoice}.`;
+        resultDiv.textContent = `You lose this round! ${computerChoice} beats ${humanChoice}.`;
     }
+    scoreDiv.textContent = `Player: ${humanScore} | Computer: ${computerScore}`;
+    checkWinner();
 }
 
-const humanChoice = getHumanChoice();
-const computerChoice = getComputerChoice();
 
-let result = playRound(humanChoice, computerChoice);
-alert(result);
-alert(`current Score - You: ${humanScore}, Computer: ${computerScore}`);
+
 
 //play a game of 5 rounds
 
-function playGame(){
+function checkWinner(){
+    if(humanScore === 5){
+        resultDiv.textContent = "Congratulations! You won the game!";
+        resetGame();    
+    }
+    else if(computerScore === 5){
+        resultDiv.textContent = "Sorry! You lost the game!";
+        resetGame();
+    }       
 
-    for(let i = 0; i < 5; i++){
-        const humanChoice = getHumanChoice();
-        const computerChoice = getComputerChoice();
-        let result = playRound(humanChoice, computerChoice);
-        alert(result);
-        alert(`current Score - You: ${humanScore}, Computer: ${computerScore}`);
-    }
-
-    if(humanScore > computerScore){
-        alert("Congratulations! You win the game!");
-    }
-    else if(computerScore > humanScore){
-        alert("Sorry! You lose the game!");
-    }
-    else{
-        alert("It's a tie game!");
-    }
-}
-
-playGame();     
+}    
+function resetGame(){
+    humanScore = 0;
+    computerScore = 0;
+    scoreDiv.textContent = `Player: ${humanScore} | Computer: ${computerScore}`;
+}   
 
 
